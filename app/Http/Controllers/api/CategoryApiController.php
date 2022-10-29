@@ -13,10 +13,15 @@ class CategoryApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $category = Category::orderBy('category_name', 'asc')->get();
+        if ($request->q) {
+            $category = Category::orderBy('category_name', 'asc')
+                ->where('category_name', 'like', '%' . $request->q . '%')->get();
+        } else {
+            $category = Category::orderBy('category_name', 'asc')->get();
+        }
 
         return response()->json(
             [
